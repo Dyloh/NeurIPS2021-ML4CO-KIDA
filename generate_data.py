@@ -30,6 +30,7 @@ NODE_RECORD_PROB = cf.getfloat("dataset", "NODE_RECORD_PROB")
 TIME_LIMIT = cf.getint("dataset", "TIME_LIMIT")
 POLICY_TYPE = cf.getint("dataset", "POLICY_TYPE")
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 if POLICY_TYPE == 0:
     policy = GNNPolicyItem().to(DEVICE)
 elif POLICY_TYPE == 1:
@@ -202,7 +203,7 @@ def make_samples(in_queue, out_queue, stop_flag):
             )
 
             action = action_set[scores[action_set].argmax()]
-            if scores_are_expert == False:
+            if scores_are_expert == False:                     # 用我们训练出来的action
                 variable_features = np.delete(variable_features, 14, axis=1)
                 variable_features = np.delete(variable_features, 13, axis=1)
 
@@ -266,6 +267,9 @@ def make_samples(in_queue, out_queue, stop_flag):
         )
 
 
+
+
+# 核心函数
 def collect_samples(
     instances, out_dir, rng, n_samples, n_jobs, query_expert_prob, time_limit
 ):
@@ -386,6 +390,22 @@ def collect_samples(
     shutil.rmtree(tmp_samples_dir, ignore_errors=True)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser = argparse.ArgumentParser()
@@ -482,6 +502,7 @@ if __name__ == "__main__":
             print("load dict")
     # create output directory, throws an error if it already exists
     os.makedirs(out_dir)
+
     cf.write(open(f"{out_dir}/dataset.ini", "w"))
 
     # generate train samples
