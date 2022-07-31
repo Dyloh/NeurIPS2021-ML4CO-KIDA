@@ -55,7 +55,7 @@ class Policy():
             self.policy.load_state_dict(fed_state_dict)
             self.policy.eval()
         elif problem == 'load_balancing':
-            continue
+            pass
         else:
             self.policy.load_state_dict(torch.load(params_path))
             self.policy.eval()
